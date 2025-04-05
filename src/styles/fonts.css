@@ -1,0 +1,33 @@
+@font-face {
+  font-family: 'Gilroy';
+  src: url(../../src/assets/fonts/Gilroy-Medium.woff) format('woff'),
+    url(../../src/assets/fonts/Gilroy-Medium.ttf) format('truetype');
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url(../../src/assets/fonts/Gilroy-Bold.woff) format('woff'),
+    url(../../src/assets/fonts/Gilroy-Bold.ttf) format('truetype');
+  font-display: swap;
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url(../../src/assets/fonts/SF-Pro-Display-Medium.otf);
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url(../../src/assets/fonts/SF-Pro-Display-Bold.otf);
+  font-display: swap;
+  font-weight: 700;
+  font-style: normal;
+}

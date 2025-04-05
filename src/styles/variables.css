@@ -1,0 +1,15 @@
+:root {
+  --white-color: #f9f9f9;
+  --light-gray-color: #686868;
+  --medium-gray-color: #e3e3e34d;
+  --dark-gray-color: #262626;
+  --very-dark-gray-color: #1f1f1f;
+  --black-color: #141414;
+  --blue-color: #4f92f7;
+  --green-color: #30b94d;
+  --red-color: #e90516;
+  --primary-font-family: 'Gilroy', sans-serif;
+  --secondary-font-family: 'SF Pro Display', sans-serif;
+  --transition-duration: 0.3s;
+  --transition-timing-function: ease-in-out;
+}
