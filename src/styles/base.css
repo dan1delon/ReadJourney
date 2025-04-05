@@ -2,7 +2,6 @@
   font-family: var(--primary-font-family), var(secondary-font-family),
     sans-serif;
   color: var(--light-gray-color);
-  background-color: var(--black-color);
 }
 
 html,
