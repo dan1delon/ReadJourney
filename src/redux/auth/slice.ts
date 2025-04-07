@@ -1,13 +1,3 @@
-import { createSlice, isAnyOf } from '@reduxjs/toolkit';
-import {
-  loginAPI,
-  logoutAPI,
-  refreshUserAPI,
-  registerAPI,
-  setToken,
-  googleOAuthAPI,
-} from './operations';
-
 const AUTH_INITIAL_STATE = {
   name: null,
   email: null,
