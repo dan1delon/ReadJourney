@@ -1,26 +1,170 @@
 .container {
-  max-width: 335px;
-  height: 411px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-height: 411px;
   border-radius: 30px;
   padding: 20px 20px 40px;
   background-color: var(--very-dark-gray-color);
 }
 
-.logoContainer {
+.iconLogo {
   width: 42px;
   height: 17px;
 }
 
-.iconLogo {
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.title {
+  color: var(--white-color);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 100%;
+  letter-spacing: 0.02em;
+}
+
+.highlight {
+  color: var(--medium-gray-color);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+
+  @media screen and (min-width: 768px) {
+    gap: 14px;
+  }
+}
+
+.labelWrapper {
+  position: relative;
+}
+
+.inputWrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--dark-gray-color);
+  padding: 14px;
+  box-sizing: border-box;
+  background-color: var(--dark-gray-color);
+  transition: all var(--transition-duration) var(--transition-timing-function);
+}
+
+.inputWrapper:hover,
+.inputWrapper:active,
+.inputWrapper:focus-within {
+  border: 1px solid rgba(249, 249, 249, 0.1);
+}
+
+.input {
+  width: 100%;
+  height: 100%;
+  font-family: var(--primary-font-family);
+  font-size: 12px;
+  line-height: 133%;
+  letter-spacing: -0.02em;
+  color: var(--white-color);
+}
+
+.btnWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.btn {
+  font-family: var(--primary-font-family);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 129%;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--white-color);
+  color: var(--very-dark-gray-color);
+
+  border-radius: 30px;
+  padding: 12px 29px;
+  max-width: 140px;
+  height: 42px;
+  transition: all var(--transition-duration) var(--transition-timing-function);
+  background-color: var(--white-color);
+}
+
+.btn:hover {
+  color: var(--white-color);
+
+  border: 1px solid rgba(249, 249, 249, 0.2);
+  background-color: transparent;
+}
+
+.linkLogin {
+  font-family: var(--primary-font-family);
+  font-size: 12px;
+  line-height: 117%;
+  letter-spacing: -0.02em;
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+  color: var(--light-gray-color);
+  transition: all var(--transition-duration) var(--transition-timing-function);
+}
+
+.linkLogin:hover {
+  color: var(--white-color);
+}
+
+.messageWrapper {
+}
+
+.errorMessage {
+}
+
+.inputError {
+}
+
+.inputError:focus,
+.inputError:active {
+}
+
+.successMessage {
+}
+
+.inputSuccess {
+}
+
+.inputSuccess:focus,
+.inputSuccess:active {
+}
+
+.showPasswordBtn {
+  display: block;
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
+}
+
+.icon {
   width: 100%;
   height: 100%;
 }
 
-.form {
-}
-
-.title {
-}
-
-.highlight {
+.iconMessage {
+  fill: none;
+  width: 16px;
+  height: 16px;
 }

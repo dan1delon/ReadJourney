@@ -1,17 +1,167 @@
+import { useState } from 'react';
+import * as Yup from 'yup';
 import Icon from '../../../shared/Icon/Icon';
 import css from './RegisterForm.module.css';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import clsx from 'clsx';
+import { NavLink } from 'react-router-dom';
 
 const RegisterForm = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [isPasswordTouched, setIsPasswordTouched] = useState(false);
+
+  const FormSchema = Yup.object({
+    name: Yup.string().required('Name is required'),
+
+    email: Yup.string()
+      .email('Invalid email address')
+      .matches(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/, 'Invalid email address')
+      .required('Email is required'),
+
+    password: Yup.string()
+      .min(6, 'Password must be at least 7 characters')
+      .required('Password is required'),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(FormSchema),
+    mode: 'onSubmit',
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = data => {
+    console.log('Form submitted:', data);
+    reset();
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handlePasswordFocus = () => {
+    setIsPasswordTouched(true);
+  };
+
+  const handlePasswordBlur = () => {
+    setIsPasswordTouched(false);
+  };
+
+  const passwordValue = getValues('password');
+  const isPasswordValid =
+    !errors.password && passwordValue && passwordValue.length >= 7;
+
   return (
     <div className={css.container}>
-      <div className={css.logoContainer}>
-        <Icon iconId="icon-logo" className={css.iconLogo} />
-      </div>
-      <div className={css.form}>
+      <Icon iconId="icon-logo" className={css.iconLogo} />
+      <div className={css.formWrapper}>
         <h2 className={css.title}>
           Expand your mind, reading{' '}
           <span className={css.highlight}>a book</span>
         </h2>
+
+        <form onSubmit={handleSubmit(onSubmit)} className={css.form}>
+          <label className={css.labelWrapper}>
+            <div className={css.inputWrapper}>
+              <p className={css.labelText}>Name:</p>
+              <input
+                type="text"
+                {...register('name')}
+                className={clsx(css.input, { [css.inputError]: errors.name })}
+              />
+              {errors.name && (
+                <Icon className={css.iconMessage} iconId="icon-error" />
+              )}
+            </div>
+            {errors.name && (
+              <p className={css.errorMessage}>{errors.name?.message}</p>
+            )}
+          </label>
+          <label className={css.labelWrapper}>
+            <div className={css.inputWrapper}>
+              <p className={css.labelText}>Mail:</p>
+              <input
+                type="email"
+                {...register('email')}
+                className={clsx(css.input, { [css.inputError]: errors.email })}
+              />
+              {errors.email && (
+                <Icon className={css.iconMessage} iconId="icon-error" />
+              )}
+            </div>
+            {errors.email && (
+              <p className={css.errorMessage}>{errors.email?.message}</p>
+            )}
+          </label>
+          <label className={css.labelWrapper}>
+            <div className={css.inputWrapper}>
+              <p className={css.labelText}>Password:</p>
+              <input
+                type={showPassword ? 'text' : 'password'}
+                {...register('password')}
+                autoComplete="on"
+                onFocus={handlePasswordFocus}
+                onBlur={handlePasswordBlur}
+                className={clsx(css.input, {
+                  [css.inputError]: errors.password,
+                  [css.inputSuccess]: !errors.password && getValues('password'),
+                })}
+              />
+              {!errors.password &&
+                isPasswordTouched &&
+                getValues('password') && (
+                  <Icon className={css.iconMessage} iconId="icon-success" />
+                )}
+              {errors.password && (
+                <Icon className={css.iconMessage} iconId="icon-error" />
+              )}
+            </div>
+            {getValues('password') && !errors.password && !isPasswordValid && (
+              <button
+                className={css.showPasswordBtn}
+                type="button"
+                onClick={handleClickShowPassword}
+              >
+                {showPassword ? (
+                  <Icon className={css.icon} iconId="icon-eye-off" />
+                ) : (
+                  <Icon className={css.icon} iconId="icon-eye" />
+                )}
+              </button>
+            )}
+
+            <div className={css.messageWrapper}>
+              {!errors.password &&
+                isPasswordTouched &&
+                getValues('password') && (
+                  <p className={clsx(css.errorMessage, css.successMessage)}>
+                    Password is valid!
+                  </p>
+                )}
+              {errors.password && (
+                <p className={css.errorMessage}>{errors.password.message}</p>
+              )}
+            </div>
+          </label>
+          <div className={css.btnWrapper}>
+            <button type="submit" className={css.btn}>
+              Registration
+            </button>
+            <NavLink to="/login" className={css.linkLogin}>
+              Already have an account?
+            </NavLink>
+          </div>
+        </form>
       </div>
     </div>
   );
