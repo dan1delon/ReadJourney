@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  border-radius: 30px;
+  width: 100%;
+  height: 351px;
+  background-color: var(--very-dark-gray-color);
+}
+
+.picture {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

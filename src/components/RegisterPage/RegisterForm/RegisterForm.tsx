@@ -72,13 +72,13 @@ const RegisterForm = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} className={css.form}>
           <label className={css.labelWrapper}>
-            <div className={css.inputWrapper}>
+            <div
+              className={clsx(css.inputWrapper, {
+                [css.inputError]: errors.name,
+              })}
+            >
               <p className={css.labelText}>Name:</p>
-              <input
-                type="text"
-                {...register('name')}
-                className={clsx(css.input, { [css.inputError]: errors.name })}
-              />
+              <input type="text" {...register('name')} className={css.input} />
               {errors.name && (
                 <Icon className={css.iconMessage} iconId="icon-error" />
               )}
@@ -88,12 +88,16 @@ const RegisterForm = () => {
             )}
           </label>
           <label className={css.labelWrapper}>
-            <div className={css.inputWrapper}>
+            <div
+              className={clsx(css.inputWrapper, {
+                [css.inputError]: errors.email,
+              })}
+            >
               <p className={css.labelText}>Mail:</p>
               <input
                 type="email"
                 {...register('email')}
-                className={clsx(css.input, { [css.inputError]: errors.email })}
+                className={css.input}
               />
               {errors.email && (
                 <Icon className={css.iconMessage} iconId="icon-error" />
@@ -104,7 +108,12 @@ const RegisterForm = () => {
             )}
           </label>
           <label className={css.labelWrapper}>
-            <div className={css.inputWrapper}>
+            <div
+              className={clsx(css.inputWrapper, {
+                [css.inputError]: errors.password,
+                [css.inputSuccess]: !errors.password && getValues('password'),
+              })}
+            >
               <p className={css.labelText}>Password:</p>
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -112,33 +121,27 @@ const RegisterForm = () => {
                 autoComplete="on"
                 onFocus={handlePasswordFocus}
                 onBlur={handlePasswordBlur}
-                className={clsx(css.input, {
-                  [css.inputError]: errors.password,
-                  [css.inputSuccess]: !errors.password && getValues('password'),
-                })}
+                className={css.input}
               />
-              {!errors.password &&
-                isPasswordTouched &&
-                getValues('password') && (
-                  <Icon className={css.iconMessage} iconId="icon-success" />
-                )}
-              {errors.password && (
-                <Icon className={css.iconMessage} iconId="icon-error" />
-              )}
             </div>
-            {getValues('password') && !errors.password && !isPasswordValid && (
-              <button
-                className={css.showPasswordBtn}
-                type="button"
-                onClick={handleClickShowPassword}
-              >
-                {showPassword ? (
-                  <Icon className={css.icon} iconId="icon-eye-off" />
-                ) : (
-                  <Icon className={css.icon} iconId="icon-eye" />
-                )}
-              </button>
-            )}
+
+            <button
+              className={css.showPasswordBtn}
+              type="button"
+              onClick={handleClickShowPassword}
+            >
+              {errors.password ? (
+                <Icon className={css.icon} iconId="icon-error" />
+              ) : isPasswordTouched &&
+                getValues('password') &&
+                isPasswordValid ? (
+                <Icon className={css.icon} iconId="icon-success" />
+              ) : showPassword ? (
+                <Icon className={css.icon} iconId="icon-eye-off" />
+              ) : (
+                <Icon className={css.icon} iconId="icon-eye" />
+              )}
+            </button>
 
             <div className={css.messageWrapper}>
               {!errors.password &&

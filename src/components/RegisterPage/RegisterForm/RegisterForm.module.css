@@ -128,23 +128,38 @@
 }
 
 .errorMessage {
+  font-size: 10px;
+  line-height: 120%;
+  letter-spacing: -0.02em;
+  color: var(--red-color);
+  margin: 4px 0 0 14px;
 }
 
 .inputError {
+  border: 1px solid #e90516;
 }
 
 .inputError:focus,
-.inputError:active {
+.inputError:active,
+.inputError:hover {
+  border: 1px solid #e90516;
 }
 
 .successMessage {
+  font-size: 12px;
+  line-height: 117%;
+  letter-spacing: -0.02em;
+  color: var(--green-color);
 }
 
 .inputSuccess {
+  border: 1px solid var(--green-color);
 }
 
 .inputSuccess:focus,
-.inputSuccess:active {
+.inputSuccess:active,
+.inputSuccess:hover {
+  border: 1px solid var(--green-color);
 }
 
 .showPasswordBtn {
@@ -152,9 +167,8 @@
   width: 18px;
   height: 18px;
   position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
+  right: 13px;
+  top: 13px;
   background-color: transparent;
 }
 
@@ -164,7 +178,9 @@
 }
 
 .iconMessage {
-  fill: none;
-  width: 16px;
-  height: 16px;
+  position: absolute;
+  right: 13px;
+  top: 13px;
+  width: 20px;
+  height: 20px;
 }
