@@ -14,7 +14,10 @@ body {
 }
 
 input:-webkit-autofill {
+  border: none;
+  outline: none;
   -webkit-box-shadow: 0 0 0 1000px var(--dark-gray-color) inset;
+  -webkit-background-clip: text;
   -webkit-text-fill-color: var(--white-color);
   transition: all var(transition-duration) var(--transition-timing-function);
 }

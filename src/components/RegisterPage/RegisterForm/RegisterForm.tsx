@@ -63,7 +63,10 @@ const RegisterForm = () => {
 
   return (
     <div className={css.container}>
-      <Icon iconId="icon-logo" className={css.iconLogo} />
+      <div className={css.logoWrapper}>
+        <Icon iconId="icon-logo" className={css.iconLogo} />
+        <p className={css.logoText}>Read Journey</p>
+      </div>
       <div className={css.formWrapper}>
         <h2 className={css.title}>
           Expand your mind, reading{' '}
@@ -111,7 +114,10 @@ const RegisterForm = () => {
             <div
               className={clsx(css.inputWrapper, {
                 [css.inputError]: errors.password,
-                [css.inputSuccess]: !errors.password && getValues('password'),
+                [css.inputSuccess]:
+                  isPasswordTouched &&
+                  !errors.password &&
+                  passwordValue.length >= 7,
               })}
             >
               <p className={css.labelText}>Password:</p>
