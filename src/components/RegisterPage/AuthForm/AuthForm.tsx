@@ -1,28 +1,32 @@
 import { useState } from 'react';
-import * as Yup from 'yup';
 import Icon from '../../../shared/Icon/Icon';
 import css from './RegisterForm.module.css';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
+import {
+  loginFormSchema,
+  registerFormSchema,
+} from '../../../helpers/formValidation';
 
-const RegisterForm = () => {
+const AuthForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isPasswordTouched, setIsPasswordTouched] = useState(false);
 
-  const FormSchema = Yup.object({
-    name: Yup.string().required('Name is required'),
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/login';
 
-    email: Yup.string()
-      .email('Invalid email address')
-      .matches(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/, 'Invalid email address')
-      .required('Email is required'),
+  type AuthFormData = {
+    name?: string;
+    email: string;
+    password: string;
+  };
 
-    password: Yup.string()
-      .min(6, 'Password must be at least 7 characters')
-      .required('Password is required'),
-  });
+  const FormSchema = isLoginPage ? loginFormSchema : registerFormSchema;
+  const defaultValues: AuthFormData = isLoginPage
+    ? { email: '', password: '' }
+    : { name: '', email: '', password: '' };
 
   const {
     register,
@@ -30,17 +34,13 @@ const RegisterForm = () => {
     reset,
     getValues,
     formState: { errors },
-  } = useForm({
+  } = useForm<AuthFormData>({
     resolver: yupResolver(FormSchema),
     mode: 'onSubmit',
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-    },
+    defaultValues,
   });
 
-  const onSubmit = data => {
+  const onSubmit = (data: AuthFormData) => {
     console.log('Form submitted:', data);
     reset();
   };
@@ -74,22 +74,28 @@ const RegisterForm = () => {
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className={css.form}>
-          <label className={css.labelWrapper}>
-            <div
-              className={clsx(css.inputWrapper, {
-                [css.inputError]: errors.name,
-              })}
-            >
-              <p className={css.labelText}>Name:</p>
-              <input type="text" {...register('name')} className={css.input} />
+          {!isLoginPage && (
+            <label className={css.labelWrapper}>
+              <div
+                className={clsx(css.inputWrapper, {
+                  [css.inputError]: errors.name,
+                })}
+              >
+                <p className={css.labelText}>Name:</p>
+                <input
+                  type="text"
+                  {...register('name')}
+                  className={css.input}
+                />
+                {errors.name && (
+                  <Icon className={css.iconMessage} iconId="icon-error" />
+                )}
+              </div>
               {errors.name && (
-                <Icon className={css.iconMessage} iconId="icon-error" />
+                <p className={css.errorMessage}>{errors.name?.message}</p>
               )}
-            </div>
-            {errors.name && (
-              <p className={css.errorMessage}>{errors.name?.message}</p>
-            )}
-          </label>
+            </label>
+          )}
           <label className={css.labelWrapper}>
             <div
               className={clsx(css.inputWrapper, {
@@ -164,10 +170,12 @@ const RegisterForm = () => {
           </label>
           <div className={css.btnWrapper}>
             <button type="submit" className={css.btn}>
-              Registration
+              {isLoginPage ? 'Log in' : 'Registration'}
             </button>
             <NavLink to="/login" className={css.linkLogin}>
-              Already have an account?
+              {isLoginPage
+                ? 'Already have an account?'
+                : 'Don’t have an account?'}
             </NavLink>
           </div>
         </form>
@@ -176,4 +184,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default AuthForm;
