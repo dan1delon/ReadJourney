@@ -1,6 +1,6 @@
-import Banner from '../../components/RegisterPage/Banner/Banner';
+import Banner from '../../components/AuthPages/Banner/Banner';
 import css from './RegisterPage.module.css';
-import AuthForm from '../../components/RegisterPage/AuthForm/AuthForm';
+import AuthForm from '../../components/AuthPages/AuthForm/AuthForm';
 
 const RegisterPage = () => {
   return (
