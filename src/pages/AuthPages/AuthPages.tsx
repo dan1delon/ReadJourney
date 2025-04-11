@@ -1,8 +1,8 @@
-import AuthForm from '../../components/AuthPages/AuthForm/AuthForm';
 import Banner from '../../components/AuthPages/Banner/Banner';
-import css from './LoginPage.module.css';
+import css from './AuthPages.module.css';
+import AuthForm from '../../components/AuthPages/AuthForm/AuthForm';
 
-const LoginPage = () => {
+const AuthPage = () => {
   return (
     <div className={css.container}>
       <AuthForm />
@@ -11,4 +11,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default AuthPage;
