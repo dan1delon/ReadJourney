@@ -59,4 +59,7 @@
     <path fill="#e90516" d="M28.8 16c0 7.069-5.731 12.8-12.8 12.8s-12.8-5.731-12.8-12.8c0-7.069 5.731-12.8 12.8-12.8s12.8 5.731 12.8 12.8z"/>
     <path fill="none" stroke="#f9f9f9" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" stroke-width="1.28" d="M31.36 16c0 8.483-6.877 15.36-15.36 15.36s-15.36-6.877-15.36-15.36c0-8.483 6.877-15.36 15.36-15.36s15.36 6.877 15.36 15.36z"/>
   </symbol>
+  <svg id="icon-mobile-menu" viewBox="0 0 24 16">
+<path d="M1.5 8H22.5M1.5 1H22.5M8.5 15H22.5" stroke="#F9F9F9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
 </svg>

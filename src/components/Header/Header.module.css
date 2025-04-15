@@ -1,0 +1,58 @@
+.container {
+  width: 100%;
+  height: 57px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  border-radius: 15px;
+  background-color: var(--very-dark-gray-color);
+}
+
+.logoLink {
+}
+
+.logo {
+  width: 42px;
+  height: 17px;
+}
+
+.usersBlock {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.userName {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: -0.02em;
+  color: var(--white-color);
+
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  border: 1px solid rgba(249, 249, 249, 0.2);
+  background-color: var(--dark-gray-color);
+}
+
+.mobileMenuButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-duration)
+    var(--transition-timing-function);
+}
+
+.mobileMenuIcon {
+  width: 21px;
+  height: 14px;
+}
