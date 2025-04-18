@@ -4,8 +4,14 @@
   flex-direction: column;
   gap: 20px;
 
-  @media screen and (min-width: 1440px) {
+  @media screen and (min-width: 768px) {
     flex-direction: row;
+    gap: 32px;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 
@@ -14,6 +20,12 @@
   line-height: 129%;
   letter-spacing: -0.02em;
   color: var(--light-gray-color);
+
+  @media screen and (min-width: 768px) {
+    font-size: 16px;
+    line-height: 112%;
+    letter-spacing: -0.02em;
+  }
 }
 
 .active {

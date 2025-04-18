@@ -3,7 +3,7 @@ import css from './NavigationMenu.module.css';
 import clsx from 'clsx';
 
 type NavigationMenuProps = {
-  toggleMenu: () => void;
+  toggleMenu?: () => void;
 };
 
 type HandleActiveLinkProps = {

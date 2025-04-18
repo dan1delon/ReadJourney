@@ -8,9 +8,17 @@
   box-sizing: border-box;
   border-radius: 15px;
   background-color: var(--very-dark-gray-color);
+  position: relative;
+
+  @media screen and (min-width: 768px) {
+    padding: 16px;
+    height: 74px;
+  }
 }
 
 .logoLink {
+  display: flex;
+  gap: 4px;
 }
 
 .logo {
@@ -18,10 +26,29 @@
   height: 17px;
 }
 
+.logoText {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--white-color);
+}
+
 .usersBlock {
   display: flex;
   align-items: center;
   gap: 10px;
+
+  @media screen and (min-width: 768px) {
+    gap: 16px;
+  }
+}
+
+.userAvatar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .userName {
@@ -39,6 +66,19 @@
   border-radius: 100%;
   border: 1px solid rgba(249, 249, 249, 0.2);
   background-color: var(--dark-gray-color);
+
+  @media screen and (min-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.userText {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 112%;
+  letter-spacing: -0.02em;
+  color: var(--white-color);
 }
 
 .mobileMenuButton {
@@ -122,6 +162,13 @@
   border-radius: 30px;
   padding: 10px 20px;
   transition: all var(--transition-duration) var(--transition-timing-function);
+
+  @media screen and (min-width: 768px) {
+    padding: 12px 28px;
+    font-size: 16px;
+    line-height: 112%;
+    letter-spacing: 0.02em;
+  }
 }
 
 .logoutBtn:hover {
