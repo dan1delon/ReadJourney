@@ -19,7 +19,7 @@ const Header = () => {
     <>
       {isOpen && <div className={css.overlay} onClick={toggleMenu} />}
       <header className={css.container}>
-        <NavLink to="/" className={css.logoLink}>
+        <NavLink to="/recommended" className={css.logoLink}>
           <Icon iconId="icon-logo" className={css.logo} />
           {isDesktop && <span className={css.logoText}>READ JOURNEY</span>}
         </NavLink>
