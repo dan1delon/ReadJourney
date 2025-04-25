@@ -1,17 +1,16 @@
-// import { selectIsLoggedIn } from '../../redux/auth/selectors';
 import { Navigate } from 'react-router-dom';
-// import { useSelector } from 'react-redux';
 import { ReactNode } from 'react';
+import { selectIsLoggedIn } from '../../redux/auth/selectors';
+import { useSelector } from 'react-redux';
 
 type RestrictedRouteProps = {
   children: ReactNode;
 };
 
 const RestrictedRoute = ({ children }: RestrictedRouteProps) => {
-  // const isLoggedIn = useSelector(selectIsLoggedIn);
-  const isLoggedIn = false;
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
-  return isLoggedIn ? <Navigate to="/dictionary" replace /> : children;
+  return isLoggedIn ? <Navigate to="/recommended" replace /> : children;
 };
 
 export default RestrictedRoute;

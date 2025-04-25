@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import Icon from '../../../shared/Icon/Icon';
 import css from './AuthForm.module.css';
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -9,21 +9,30 @@ import {
   loginFormSchema,
   registerFormSchema,
 } from '../../../helpers/formValidation';
+import {
+  loginAPI,
+  registerAPI,
+  LoginForm,
+  RegisterForm,
+} from '../../../redux/auth/operations';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux/store';
 
-const AuthForm = () => {
+interface AuthFormData {
+  name?: string;
+  email: string;
+  password: string;
+}
+
+const AuthForm: FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isPasswordTouched, setIsPasswordTouched] = useState(false);
 
+  const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
 
-  type AuthFormData = {
-    name?: string;
-    email: string;
-    password: string;
-  };
-
-  const FormSchema = isLoginPage ? loginFormSchema : registerFormSchema;
+  const formSchema = isLoginPage ? loginFormSchema : registerFormSchema;
   const defaultValues: AuthFormData = isLoginPage
     ? { email: '', password: '' }
     : { name: '', email: '', password: '' };
@@ -35,31 +44,27 @@ const AuthForm = () => {
     getValues,
     formState: { errors },
   } = useForm<AuthFormData>({
-    resolver: yupResolver(FormSchema),
+    resolver: yupResolver(formSchema),
     mode: 'onSubmit',
     defaultValues,
   });
 
-  const onSubmit = (data: AuthFormData) => {
-    console.log('Form submitted:', data);
+  const onSubmit: SubmitHandler<AuthFormData> = data => {
+    if (isLoginPage) {
+      dispatch(loginAPI(data as LoginForm));
+    } else {
+      dispatch(registerAPI(data as RegisterForm));
+    }
     reset();
   };
 
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handlePasswordFocus = () => {
-    setIsPasswordTouched(true);
-  };
-
-  const handlePasswordBlur = () => {
-    setIsPasswordTouched(false);
-  };
+  const handleClickShowPassword = () => setShowPassword(prev => !prev);
+  const handlePasswordFocus = () => setIsPasswordTouched(true);
+  const handlePasswordBlur = () => setIsPasswordTouched(false);
 
   const passwordValue = getValues('password');
   const isPasswordValid =
-    !errors.password && passwordValue && passwordValue.length >= 7;
+    !errors.password && !!passwordValue && passwordValue.length >= 7;
 
   return (
     <div className={css.container}>

@@ -1,4 +1,24 @@
-const AUTH_INITIAL_STATE = {
+import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
+import {
+  registerAPI,
+  loginAPI,
+  refreshUserAPI,
+  logoutAPI,
+  AuthResponse,
+  RefreshResponseData,
+} from './operations';
+
+export interface AuthState {
+  name: string | null;
+  email: string | null;
+  token: string | null;
+  isLoggedIn: boolean;
+  isRefreshing: boolean;
+  loading: boolean;
+  error: boolean;
+}
+
+const initialState: AuthState = {
   name: null,
   email: null,
   token: null,
@@ -8,89 +28,69 @@ const AUTH_INITIAL_STATE = {
   error: false,
 };
 
-const handlePending = state => {
+const handlePending = (state: AuthState) => {
   state.loading = true;
   state.error = false;
 };
 
-const handleRejected = state => {
+const handleRejected = (state: AuthState) => {
   state.loading = false;
   state.error = true;
 };
 
 const authSlice = createSlice({
   name: 'auth',
-
-  initialState: AUTH_INITIAL_STATE,
-
+  initialState,
+  reducers: {},
   extraReducers: builder => {
     builder
-      // Registration
-      .addCase(registerAPI.fulfilled, (state, action) => {
-        state.loading = false;
-        state.isLoggedIn = true;
-        state.name = action.payload.name;
-        state.email = action.payload.email;
-        state.token = action.payload.token;
-      })
-      //   Login
-      .addCase(loginAPI.fulfilled, (state, action) => {
-        state.loading = false;
-        state.isLoggedIn = true;
-        state.name = action.payload.name;
-        state.email = action.payload.email;
-        state.token = action.payload.token;
-      })
-      //   GoogleOAuth
-      .addCase(googleOAuthAPI.fulfilled, (state, action) => {
-        state.loading = false;
-        state.isLoggedIn = true;
-        state.name = action.payload.name;
-        state.email = action.payload.email;
-        state.token = action.payload.accessToken;
-      })
-      //   Refresh
+      .addCase(
+        registerAPI.fulfilled,
+        (state, action: PayloadAction<AuthResponse>) => {
+          state.loading = false;
+          state.isLoggedIn = true;
+          state.name = action.payload.name;
+          state.email = action.payload.email;
+          state.token = action.payload.token;
+        }
+      )
+      .addCase(
+        loginAPI.fulfilled,
+        (state, action: PayloadAction<AuthResponse>) => {
+          state.loading = false;
+          state.isLoggedIn = true;
+          state.name = action.payload.name;
+          state.email = action.payload.email;
+          state.token = action.payload.token;
+        }
+      )
       .addCase(refreshUserAPI.pending, state => {
         state.isRefreshing = true;
-        state.isLoggedIn = false;
-        state.token = null;
         state.loading = true;
         state.error = false;
       })
-      .addCase(refreshUserAPI.fulfilled, (state, action) => {
-        state.isRefreshing = false;
-        state.isLoggedIn = true;
-        state.token = action.payload.accessToken;
-        setToken(action.payload.accessToken);
-      })
+      .addCase(
+        refreshUserAPI.fulfilled,
+        (state, action: PayloadAction<RefreshResponseData>) => {
+          state.isRefreshing = false;
+          state.isLoggedIn = true;
+          state.token = action.payload.accessToken;
+        }
+      )
       .addCase(refreshUserAPI.rejected, state => {
         state.isRefreshing = false;
+        state.loading = false;
         state.isLoggedIn = false;
         state.token = null;
         state.error = true;
-        state.loading = false;
       })
-      //   Logout
-      .addCase(logoutAPI.fulfilled, () => {
-        return AUTH_INITIAL_STATE;
-      })
-      // Matchers
+      .addCase(logoutAPI.fulfilled, () => initialState)
       .addMatcher(
-        isAnyOf(
-          registerAPI.pending,
-          loginAPI.pending,
-          logoutAPI.pending,
-          googleOAuthAPI.pending
-        ),
+        isAnyOf(registerAPI.pending, loginAPI.pending, logoutAPI.pending),
         handlePending
       )
       .addMatcher(
-        isAnyOf(
-          registerAPI.rejected,
-          loginAPI.rejected,
-          logoutAPI.rejected,
-          googleOAuthAPI.rejected
-        ),
+        isAnyOf(registerAPI.rejected, loginAPI.rejected, logoutAPI.rejected),
         handleRejected
       );
   },

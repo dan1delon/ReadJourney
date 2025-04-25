@@ -4,15 +4,23 @@ import Icon from '../../shared/Icon/Icon';
 import { useState } from 'react';
 import NavigationMenu from '../NavigationMenu/NavigationMenu';
 import { useMediaQuery } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { logoutAPI } from '../../redux/auth/operations';
+import { AppDispatch } from '../../redux/store';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
 
   const isMobile = useMediaQuery('(max-width: 767px)');
   const isDesktop = useMediaQuery('(min-width: 1280px)');
 
   const toggleMenu = () => {
     setIsOpen(prevState => !prevState);
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutAPI());
   };
 
   return (
@@ -38,7 +46,11 @@ const Header = () => {
               <Icon iconId="icon-mobile-menu" className={css.mobileMenuIcon} />
             </button>
           ) : (
-            <button type="button" className={css.logoutBtn}>
+            <button
+              type="button"
+              className={css.logoutBtn}
+              onClick={handleLogout}
+            >
               Log out
             </button>
           )}
@@ -51,7 +63,9 @@ const Header = () => {
             </button>
             <span />
             <NavigationMenu toggleMenu={toggleMenu} />
-            <button className={css.logoutBtn}>Log out</button>
+            <button className={css.logoutBtn} onClick={handleLogout}>
+              Log out
+            </button>
           </div>
         )}
       </header>
