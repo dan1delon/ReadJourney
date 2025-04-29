@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import css from './modal.module.css';
-import Modal from '../../src/components/Modal/Modal';
+import Modal from '../components/Modal/Modal';
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 
 const modalContext = createContext();

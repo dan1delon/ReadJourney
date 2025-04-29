@@ -4,13 +4,17 @@ import Icon from '../../shared/Icon/Icon';
 import { useState } from 'react';
 import NavigationMenu from '../NavigationMenu/NavigationMenu';
 import { useMediaQuery } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logoutAPI } from '../../redux/auth/operations';
 import { AppDispatch } from '../../redux/store';
+import { selectUserName } from '../../redux/auth/selectors';
+import { useScrollContext } from '../../context';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+  const { headerRef } = useScrollContext();
+  const userName = useSelector(selectUserName) || 'User';
 
   const isMobile = useMediaQuery('(max-width: 767px)');
   const isDesktop = useMediaQuery('(min-width: 1280px)');
@@ -26,7 +30,7 @@ const Header = () => {
   return (
     <>
       {isOpen && <div className={css.overlay} onClick={toggleMenu} />}
-      <header className={css.container}>
+      <header className={css.container} ref={headerRef}>
         <NavLink to="/recommended" className={css.logoLink}>
           <Icon iconId="icon-logo" className={css.logo} />
           {isDesktop && <span className={css.logoText}>READ JOURNEY</span>}
@@ -34,8 +38,8 @@ const Header = () => {
         {!isMobile && <NavigationMenu />}
         <div className={css.usersBlock}>
           <div className={css.userAvatar}>
-            <div className={css.userName}>U</div>
-            {isDesktop && <span className={css.userText}>User</span>}
+            <div className={css.userName}>{userName[0]}</div>
+            {isDesktop && <span className={css.userText}>{userName}</span>}
           </div>
           {isMobile ? (
             <button

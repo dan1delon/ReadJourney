@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
+import { RootState } from '../store';
 
 export interface RegisterForm {
   name: string;
@@ -28,57 +29,6 @@ export const instance = axios.create({
   baseURL: 'https://readjourney.b.goit.study/api',
 });
 
-let isRefreshing = false;
-let refreshSubscribers = [];
-
-const onTokenRefreshed = newToken => {
-  refreshSubscribers.forEach(callback => callback(newToken));
-  refreshSubscribers = [];
-};
-
-instance.interceptors.request.use(config => {
-  config.params = { ...config.params, t: Date.now() };
-  return config;
-});
-
-instance.interceptors.response.use(
-  response => response,
-  async error => {
-    const originalRequest = error.config;
-
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry &&
-      !isRefreshing
-    ) {
-      originalRequest._retry = true;
-      isRefreshing = true;
-
-      try {
-        const { data } = await instance.post('/users/current/refresh');
-        const newAccessToken = data.data.accessToken;
-
-        setToken(newAccessToken);
-
-        isRefreshing = false;
-        onTokenRefreshed(newAccessToken);
-
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return instance(originalRequest);
-      } catch (refreshError) {
-        isRefreshing = false;
-        clearToken();
-        return Promise.reject(refreshError);
-      }
-    } else if (error.response?.status === 401) {
-      clearToken();
-      return Promise.reject(error);
-    }
-
-    return Promise.reject(error);
-  }
-);
-
 export const setToken = (token: string | null) => {
   if (token) {
     instance.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -88,7 +38,7 @@ export const setToken = (token: string | null) => {
 };
 
 export const clearToken = () => {
-  delete instance.defaults.headers.common.Authorization;
+  instance.defaults.headers.common.Authorization = '';
   localStorage.removeItem('token');
 };
 
@@ -123,6 +73,7 @@ export const loginAPI = createAsyncThunk<
       formData
     );
     setToken(data.token);
+
     return data;
   } catch (err) {
     const error = err as AxiosError<{ message: string }>;
@@ -137,11 +88,19 @@ export const refreshUserAPI = createAsyncThunk<
   void,
   { rejectValue: string }
 >('auth/refresh', async (_, thunkApi) => {
+  const state: RootState = thunkApi.getState();
+  const persistedToken = state.auth.token;
+
+  if (persistedToken === null) {
+    return thunkApi.rejectWithValue('Unable to fetch user');
+  }
   try {
+    setToken(persistedToken);
     const { data } = await instance.get<RefreshResponseData>(
       '/users/current/refresh'
     );
     setToken(data.token);
+
     return data;
   } catch (err) {
     const error = err as AxiosError<{ message: string }>;
