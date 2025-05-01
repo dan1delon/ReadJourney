@@ -31,6 +31,7 @@
 
 .booksItem {
   width: 137px;
+  height: 248px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -43,6 +44,9 @@
 }
 
 .textWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .bookTitle {
@@ -51,6 +55,9 @@
   line-height: 129%;
   letter-spacing: -0.02em;
   color: var(--white-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .bookAuthor {
