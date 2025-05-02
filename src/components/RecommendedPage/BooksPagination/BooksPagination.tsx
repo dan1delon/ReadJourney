@@ -1,66 +1,43 @@
 import css from './BooksPagination.module.css';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   selectRecommendPage,
   selectRecommendTotalPages,
 } from '../../../redux/books/selectors';
-import { useScrollContext } from '../../../context/ScrollContext';
 import { changePage } from '../../../redux/books/slice';
+import { AppDispatch } from '../../../redux/store';
+import Icon from '../../../shared/Icon/Icon';
 
 const BooksPagination = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const pageTotalCount = useSelector(selectRecommendTotalPages) || 1;
   const currentPage = useSelector(selectRecommendPage) || 1;
-  const { headerRef } = useScrollContext();
 
-  const scrollToHeader = () => {
-    if (headerRef.current) {
-      headerRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const handleChange = (event, value) => {
-    scrollToHeader();
-    dispatch(changePage(value));
+  const goToPage = (newPage: number) => {
+    dispatch(changePage(newPage));
   };
 
   if (pageTotalCount <= 1) return null;
 
   return (
     <div className={css.wrapper}>
-      <Stack spacing={2} className={css.pagination}>
-        <Pagination
-          count={pageTotalCount}
-          page={currentPage}
-          onChange={handleChange}
-          variant="outlined"
-          shape="rounded"
-          showFirstButton
-          showLastButton
-          siblingCount={0}
-          boundaryCount={1}
-          sx={{
-            '& .MuiPaginationItem-root': {
-              border: '1px solid rgba(18, 20, 23, 0.1)',
-              borderRadius: '8px',
-              padding: '10px',
-              width: '32px',
-              height: '32px',
-              color: '#121417',
-              fontFamily: 'MacPaw Fixel Display',
-              fontWeight: 600,
-              fontSize: '13px',
-            },
+      <button
+        className={`${css.button} ${currentPage === 1 ? css.disabled : ''}`}
+        onClick={() => goToPage(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        <Icon iconId="icon-chevron-left" className={css.iconArrowBack} />
+      </button>
 
-            '& .MuiPaginationItem-root:hover': {
-              background: '#85aa9f',
-              color: 'white',
-            },
-          }}
-        />
-      </Stack>
+      <button
+        className={`${css.button} ${
+          currentPage === pageTotalCount ? css.disabled : ''
+        }`}
+        onClick={() => goToPage(currentPage + 1)}
+        disabled={currentPage === pageTotalCount}
+      >
+        <Icon iconId="icon-chevron-left" className={css.iconArrowNext} />
+      </button>
     </div>
   );
 };
