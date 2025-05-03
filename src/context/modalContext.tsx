@@ -5,63 +5,81 @@ import {
   useEffect,
   useRef,
   useState,
+  ReactNode,
+  FC,
 } from 'react';
 import { createPortal } from 'react-dom';
 import css from './modal.module.css';
 import Modal from '../components/Modal/Modal';
-import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 
-const modalContext = createContext();
-export const useModal = () => useContext(modalContext);
+interface ModalContextType {
+  modalContent: ReactNode | null;
+  openModal: (content: ReactNode) => void;
+  closeModal: (
+    e?: React.MouseEvent | React.KeyboardEvent | { type: 'submit' }
+  ) => void;
+}
 
-export const ModalProvider = ({ children }) => {
-  const [modalContent, setModalContent] = useState(null);
-  const backdropRef = useRef(null);
+const modalContext = createContext<ModalContextType | null>(null);
 
-  const closeModal = useCallback(e => {
-    if (
-      (e && e.target === e.currentTarget) ||
-      (e && e.code === 'Escape') ||
-      (e && e.type === 'submit')
-    ) {
-      // if (backdropRef.current) {
-      //   enableBodyScroll(backdropRef.current);
-      // }
+export const useModal = () => {
+  const context = useContext(modalContext);
+  if (!context) {
+    throw new Error('useModal must be used within a ModalProvider');
+  }
+  return context;
+};
 
-      backdropRef.current.style.opacity = 0;
-      backdropRef.current.style.visibility = 'hidden';
+interface ModalProviderProps {
+  children: ReactNode;
+}
 
-      setTimeout(() => {
-        setModalContent(null);
-      }, 300);
-    }
-  }, []);
+export const ModalProvider: FC<ModalProviderProps> = ({ children }) => {
+  const [modalContent, setModalContent] = useState<ReactNode | null>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
 
-  const openModal = content => {
+  const closeModal = useCallback(
+    (
+      e?:
+        | MouseEvent
+        | KeyboardEvent
+        | React.MouseEvent
+        | React.KeyboardEvent
+        | { type: 'submit' }
+    ) => {
+      if (
+        (e && 'target' in e && e.target === e.currentTarget) ||
+        (e && 'code' in e && e.code === 'Escape') ||
+        (e && e.type === 'submit')
+      ) {
+        if (backdropRef.current) {
+          backdropRef.current.style.opacity = '0';
+          backdropRef.current.style.visibility = 'hidden';
+        }
+
+        setTimeout(() => setModalContent(null), 300);
+      }
+    },
+    []
+  );
+
+  const openModal = (content: ReactNode) => {
     setModalContent(content);
-
     setTimeout(() => {
       if (backdropRef.current) {
-        // disableBodyScroll(document.body);
-        backdropRef.current.style.opacity = 1;
+        backdropRef.current.style.opacity = '1';
         backdropRef.current.style.visibility = 'visible';
       }
     }, 10);
   };
 
   useEffect(() => {
-    const handleKeyDown = e => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Escape') closeModal(e);
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-
-      // if (backdropRef.current) {
-      //   enableBodyScroll(backdropRef.current);
-      // }
-    };
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [closeModal]);
 
   return (
@@ -76,7 +94,7 @@ export const ModalProvider = ({ children }) => {
           >
             <Modal>{modalContent}</Modal>
           </div>,
-          document.querySelector('#modal-root')
+          document.querySelector('#modal-root')!
         )}
     </modalContext.Provider>
   );

@@ -1,14 +1,19 @@
+import { FC, ReactNode, MouseEvent } from 'react';
 import css from './Modal.module.css';
 import { useModal } from '../../context';
 import Icon from '../../shared/Icon/Icon';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const Modal = ({ children }) => {
+interface ModalProps {
+  children: ReactNode;
+}
+
+const Modal: FC<ModalProps> = ({ children }) => {
   const { closeModal } = useModal();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleCloseModal = e => {
+  const handleCloseModal = (e: MouseEvent<HTMLButtonElement>) => {
     closeModal(e);
     if (location.pathname === '/training') {
       navigate('/dictionary');
