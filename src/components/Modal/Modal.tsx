@@ -2,7 +2,6 @@ import { FC, ReactNode, MouseEvent } from 'react';
 import css from './Modal.module.css';
 import { useModal } from '../../context';
 import Icon from '../../shared/Icon/Icon';
-import { useNavigate, useLocation } from 'react-router-dom';
 
 interface ModalProps {
   children: ReactNode;
@@ -10,14 +9,9 @@ interface ModalProps {
 
 const Modal: FC<ModalProps> = ({ children }) => {
   const { closeModal } = useModal();
-  const navigate = useNavigate();
-  const location = useLocation();
 
   const handleCloseModal = (e: MouseEvent<HTMLButtonElement>) => {
     closeModal(e);
-    if (location.pathname === '/training') {
-      navigate('/dictionary');
-    }
   };
 
   return (
@@ -28,7 +22,7 @@ const Modal: FC<ModalProps> = ({ children }) => {
           aria-label="close-modal-window-button"
           onClick={handleCloseModal}
         >
-          <Icon iconId="icon-close" className={css.iconClose} />
+          <Icon iconId="icon-x" className={css.iconClose} />
         </button>
         {children}
       </div>

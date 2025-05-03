@@ -1,0 +1,65 @@
+.container {
+  box-sizing: border-box;
+  width: 335px;
+  min-height: 421px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  gap: 16px;
+}
+
+.image {
+  border-radius: 8px;
+  width: 140px;
+  height: 213px;
+  object-fit: cover;
+}
+
+.bookTitle {
+  text-align: center;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: -0.02em;
+  color: var(--white-color);
+  margin-bottom: 2px;
+}
+
+.bookAuthor {
+  text-align: center;
+  font-size: 12px;
+  line-height: 117%;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.bookPages {
+  text-align: center;
+  font-size: 10px;
+  line-height: 120%;
+  letter-spacing: -0.02em;
+  color: var(--white-color);
+}
+
+.button {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 129%;
+  letter-spacing: 0.02em;
+  color: var(--white-color);
+
+  border: 1px solid rgba(249, 249, 249, 0.2);
+  border-radius: 30px;
+  padding: 12px 24px;
+  background: transparent;
+  margin-top: 4px;
+  transition: all var(--transition-duration) var(--transition-timing-function);
+  cursor: pointer;
+}
+
+.button:hover {
+  background: var(--white-color);
+  border: 1px solid var(--white-color);
+  color: var(--very-dark-gray-color);
+}

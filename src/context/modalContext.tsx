@@ -13,8 +13,8 @@ import css from './modal.module.css';
 import Modal from '../components/Modal/Modal';
 
 interface ModalContextType {
-  modalContent: ReactNode | null;
-  openModal: (content: ReactNode) => void;
+  modalContent: (() => ReactNode) | null;
+  openModal: (content: () => ReactNode) => void;
   closeModal: (
     e?: React.MouseEvent | React.KeyboardEvent | { type: 'submit' }
   ) => void;
@@ -35,7 +35,9 @@ interface ModalProviderProps {
 }
 
 export const ModalProvider: FC<ModalProviderProps> = ({ children }) => {
-  const [modalContent, setModalContent] = useState<ReactNode | null>(null);
+  const [modalContent, setModalContent] = useState<(() => ReactNode) | null>(
+    null
+  );
   const backdropRef = useRef<HTMLDivElement>(null);
 
   const closeModal = useCallback(
@@ -63,8 +65,8 @@ export const ModalProvider: FC<ModalProviderProps> = ({ children }) => {
     []
   );
 
-  const openModal = (content: ReactNode) => {
-    setModalContent(content);
+  const openModal = (content: () => ReactNode) => {
+    setModalContent(() => content);
     setTimeout(() => {
       if (backdropRef.current) {
         backdropRef.current.style.opacity = '1';
@@ -82,6 +84,9 @@ export const ModalProvider: FC<ModalProviderProps> = ({ children }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [closeModal]);
 
+  const modalRoot = document.getElementById('modal-root');
+  if (!modalRoot) return null;
+
   return (
     <modalContext.Provider value={{ modalContent, openModal, closeModal }}>
       {children}
@@ -92,9 +97,9 @@ export const ModalProvider: FC<ModalProviderProps> = ({ children }) => {
             ref={backdropRef}
             onClick={closeModal}
           >
-            <Modal>{modalContent}</Modal>
+            <Modal>{modalContent()}</Modal>
           </div>,
-          document.querySelector('#modal-root')!
+          modalRoot
         )}
     </modalContext.Provider>
   );

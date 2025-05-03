@@ -110,7 +110,7 @@ export const fetchOwnBooks = createAsyncThunk<
   Book[],
   { status?: 'unread' | 'in-progress' | 'done' },
   { rejectValue: string }
->('books/fetchOwn', async (params, { rejectWithValue }) => {
+>('books/fetchOwn', async (params = {}, { rejectWithValue }) => {
   try {
     const { data } = await instance.get<Book[]>('/books/own', { params });
     return data;

@@ -2,12 +2,23 @@ import { useSelector } from 'react-redux';
 import css from './RecommendedBooks.module.css';
 import { selectRecommendedBooks } from '../../../redux/books/selectors';
 import BooksPagination from '../BooksPagination/BooksPagination';
+import { useModal } from '../../../context';
+import ModalBookInfo from '../ModalBookInfo/ModalBookInfo';
+
+export interface Book {
+  _id: string;
+  title: string;
+  author: string;
+  imageUrl: string;
+  totalPages: number;
+}
 
 const RecommendedBooks = () => {
   const books = useSelector(selectRecommendedBooks);
+  const { openModal } = useModal();
 
-  const handleBookClick = () => {
-    console.log('Book clicked');
+  const handleBookClick = (book: Book) => {
+    openModal(() => <ModalBookInfo book={book} />);
   };
 
   return (
@@ -21,7 +32,7 @@ const RecommendedBooks = () => {
           <li
             key={book._id}
             className={css.booksItem}
-            onClick={handleBookClick}
+            onClick={() => handleBookClick(book)}
           >
             <img src={book.imageUrl} alt={book.title} className={css.image} />
             <div className={css.textWrapper}>
