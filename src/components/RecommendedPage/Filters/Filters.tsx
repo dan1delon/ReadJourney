@@ -1,19 +1,26 @@
 import { useForm } from 'react-hook-form';
 import css from './Filters.module.css';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux/store';
+import { fetchRecommendedBooks } from '../../../redux/books/operations';
 
 const Filters = () => {
-  type AuthFormData = {
+  const dispatch = useDispatch<AppDispatch>();
+
+  type SearchData = {
     title: string;
     author: string;
   };
 
-  const { register, handleSubmit, reset } = useForm<AuthFormData>({
+  const { register, handleSubmit, reset } = useForm<SearchData>({
     mode: 'onSubmit',
     defaultValues: { title: '', author: '' },
   });
 
-  const onSubmit = (data: AuthFormData) => {
-    console.log('Form submitted:', data);
+  const onSubmit = (data: SearchData) => {
+    const { title, author } = data;
+    const filters = { title, author };
+    dispatch(fetchRecommendedBooks(filters));
     reset();
   };
 

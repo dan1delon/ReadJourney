@@ -6,6 +6,10 @@ import BooksPagination from '../BooksPagination/BooksPagination';
 const RecommendedBooks = () => {
   const books = useSelector(selectRecommendedBooks);
 
+  const handleBookClick = () => {
+    console.log('Book clicked');
+  };
+
   return (
     <div className={css.container}>
       <div className={css.paginationWrapper}>
@@ -14,7 +18,11 @@ const RecommendedBooks = () => {
       </div>
       <ul className={css.booksList}>
         {books.map(book => (
-          <li key={book._id} className={css.booksItem}>
+          <li
+            key={book._id}
+            className={css.booksItem}
+            onClick={handleBookClick}
+          >
             <img src={book.imageUrl} alt={book.title} className={css.image} />
             <div className={css.textWrapper}>
               <h3 className={css.bookTitle}>{book.title}</h3>
