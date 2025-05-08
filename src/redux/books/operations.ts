@@ -78,9 +78,9 @@ export const addRecommendedBook = createAsyncThunk<
   Book,
   string,
   { rejectValue: string }
->('books/addRecommended', async (id, { rejectWithValue }) => {
+>('books/addRecommended', async (bookId, { rejectWithValue }) => {
   try {
-    const { data } = await instance.post<Book>(`/books/add/${id}`);
+    const { data } = await instance.post<Book>(`/books/add/${bookId}`);
     return data;
   } catch (err) {
     const error = err as AxiosError<{ message: string }>;
@@ -90,15 +90,15 @@ export const addRecommendedBook = createAsyncThunk<
 
 // 4. DELETE /books/remove/{id}
 export const deleteBook = createAsyncThunk<
-  DeleteResponse,
+  { id: string },
   string,
   { rejectValue: string }
->('books/delete', async (id, { rejectWithValue }) => {
+>('books/delete', async (bookId, { rejectWithValue }) => {
   try {
-    const { data } = await instance.delete<DeleteResponse>(
-      `/books/remove/${id}`
+    const { data } = await instance.delete<{ message: string; id: string }>(
+      `/books/remove/${bookId}`
     );
-    return data;
+    return { id: data.id };
   } catch (err) {
     const error = err as AxiosError<{ message: string }>;
     return rejectWithValue(error.response?.data?.message || error.message);

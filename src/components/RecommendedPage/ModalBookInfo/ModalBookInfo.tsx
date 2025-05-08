@@ -8,7 +8,7 @@ import {
 } from '../../../redux/books/operations';
 import { AppDispatch } from '../../../redux/store';
 import { selectUsersBooks } from '../../../redux/books/selectors';
-import { use } from 'react';
+import { useEffect } from 'react';
 
 interface ModalBookInfoProps {
   book: Book;
@@ -18,18 +18,19 @@ const ModalBookInfo: React.FC<ModalBookInfoProps> = ({ book }) => {
   const dispatch = useDispatch<AppDispatch>();
   const usersBooks = useSelector(selectUsersBooks);
 
-  const existingBook = usersBooks.find(b => b._id === book._id);
-
-  const handleAddToLibrary = async () => {
-    await dispatch(addRecommendedBook(book._id));
+  useEffect(() => {
     dispatch(fetchOwnBooks({}));
-    console.log(usersBooks);
+  }, [dispatch]);
+
+  const existingBook = usersBooks.some(b => b._id === book._id);
+
+  const handleAddToLibrary = () => {
+    dispatch(addRecommendedBook(book._id));
   };
 
-  const handleDeleteFromLibrary = async () => {
+  const handleDeleteFromLibrary = () => {
     if (existingBook) {
-      await dispatch(deleteBook(existingBook._id));
-      dispatch(fetchOwnBooks({}));
+      dispatch(deleteBook(book._id));
     }
   };
 
