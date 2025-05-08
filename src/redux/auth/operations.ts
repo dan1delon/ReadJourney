@@ -1,7 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
-import { RootState } from '../store';
 
 export interface RegisterForm {
   name: string;

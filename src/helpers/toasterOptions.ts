@@ -1,7 +1,8 @@
-export const toastOptions = {
+import type { DefaultToastOptions } from 'react-hot-toast';
+
+export const toastOptions: DefaultToastOptions = {
   duration: 3000,
   style: {
-    position: 'top-right',
     borderRadius: '10px',
     color: '#121417',
     padding: '16px',
