@@ -22,7 +22,7 @@ const ModalBookInfo: React.FC<ModalBookInfoProps> = ({ book }) => {
     dispatch(fetchOwnBooks({}));
   }, [dispatch]);
 
-  const existingBook = usersBooks.some(b => b._id === book._id);
+  const existingBook = usersBooks.find(b => b.title === book.title);
 
   const handleAddToLibrary = () => {
     dispatch(addRecommendedBook(book._id));

@@ -5,8 +5,8 @@ import { Route, Routes } from 'react-router-dom';
 import RestrictedRoute from './components/RestrictedRoute/RestrictedRoute.tsx';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute.tsx';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectIsRefreshing } from './redux/auth/selectors.ts';
-import { refreshUserAPI } from './redux/auth/operations.ts';
+import { selectIsRefreshing, selectToken } from './redux/auth/selectors.ts';
+import { refreshUserAPI, setToken } from './redux/auth/operations.ts';
 import { AppDispatch } from './redux/store.ts';
 
 const AuthPage = lazy(() => import('./pages/AuthPages/AuthPages.tsx'));
@@ -25,6 +25,11 @@ const NotFoundPage = lazy(
 function App() {
   const dispatch = useDispatch<AppDispatch>();
   const isRefreshing = useSelector(selectIsRefreshing);
+  const token = useSelector(selectToken);
+
+  useEffect(() => {
+    setToken(token);
+  }, [token]);
 
   useEffect(() => {
     dispatch(refreshUserAPI());

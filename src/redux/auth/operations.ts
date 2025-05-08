@@ -29,16 +29,22 @@ export const instance = axios.create({
   baseURL: 'https://readjourney.b.goit.study/api',
 });
 
+export const refreshInstance = axios.create({
+  baseURL: 'https://readjourney.b.goit.study/api',
+  withCredentials: true,
+});
+
 export const setToken = (token: string | null) => {
   if (token) {
     instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+    localStorage.setItem('token', token);
   } else {
     clearToken();
   }
 };
 
 export const clearToken = () => {
-  instance.defaults.headers.common.Authorization = '';
+  delete instance.defaults.headers.common.Authorization;
   localStorage.removeItem('token');
 };
 
@@ -88,25 +94,18 @@ export const refreshUserAPI = createAsyncThunk<
   void,
   { rejectValue: string }
 >('auth/refresh', async (_, thunkApi) => {
-  const state: RootState = thunkApi.getState();
-  const persistedToken = state.auth.token;
-
-  if (persistedToken === null) {
-    return thunkApi.rejectWithValue('Unable to fetch user');
-  }
   try {
-    setToken(persistedToken);
-    const { data } = await instance.get<RefreshResponseData>(
+    const { data } = await refreshInstance.get<RefreshResponseData>(
       '/users/current/refresh'
     );
     setToken(data.token);
-
     return data;
   } catch (err) {
-    const error = err as AxiosError<{ message: string }>;
-    const msg = error.response?.data?.message || error.message;
     clearToken();
-    return thunkApi.rejectWithValue(msg);
+    const error = err as AxiosError<{ message: string }>;
+    return thunkApi.rejectWithValue(
+      error.response?.data?.message || error.message
+    );
   }
 });
 
