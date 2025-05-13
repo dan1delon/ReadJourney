@@ -24,14 +24,14 @@ const ModalBookInfo: React.FC<ModalBookInfoProps> = ({ book }) => {
 
   const existingBook = usersBooks.find(b => b.title === book.title);
 
-  const handleAddToLibrary = () => {
-    dispatch(addRecommendedBook(book._id));
+  const handleAddToLibrary = async () => {
+    await dispatch(addRecommendedBook(book._id));
+    await dispatch(fetchOwnBooks({}));
   };
 
-  const handleDeleteFromLibrary = () => {
-    if (existingBook) {
-      dispatch(deleteBook(book._id));
-    }
+  const handleDeleteFromLibrary = async () => {
+    await dispatch(deleteBook(book._id));
+    await dispatch(fetchOwnBooks({}));
   };
 
   return (
