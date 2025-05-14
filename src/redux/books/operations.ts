@@ -10,7 +10,7 @@ export interface Book {
   totalPages: number;
   status?: 'unread' | 'in-progress' | 'done';
   owner?: string;
-  progress?: any[];
+  progress?: [];
   timeLeftToRead?: {
     hours: number;
     minutes: number;
